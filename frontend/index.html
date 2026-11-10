@@ -4,7 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NEXUS AI - intelligent RAG optimisation and cost-aware model orchestration" />
     <title>NEXUS AI</title>
+    <script>
+      // Apply the saved theme before the first paint (prevents a white flash in dark mode).
+      try {
+        var t = localStorage.getItem('nexus-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        if (localStorage.getItem('nexus-reduce-motion') === 'true') document.documentElement.classList.add('reduce-motion');
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

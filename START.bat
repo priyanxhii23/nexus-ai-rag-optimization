@@ -1,5 +1,3 @@
 @echo off
-cd /d "%~dp0"
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\start.ps1"
-echo.
-pause
+REM Kept for compatibility: START.bat now runs start_all.bat
+call "%~dp0start_all.bat"

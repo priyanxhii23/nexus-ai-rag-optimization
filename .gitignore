@@ -25,12 +25,17 @@ npm-debug.log*
 data/documents/*
 !data/documents/.gitkeep
 data/chroma/
+data/models/
+data/logs/
+data/*.db-wal
+data/*.db-shm
 data/*.db
 data/*.sqlite
 backend/*.db
 
-# Benchmark question sets ARE committed; generated run outputs are not
-data/benchmarks/runs/
+# Benchmark datasets ship in backend/app/evaluation/datasets/; generated outputs are not committed
+data/benchmarks/*
+!data/benchmarks/.gitkeep
 
 # Hugging Face / sentence-transformers model cache
 .cache/
@@ -44,3 +49,6 @@ Thumbs.db
 !.vscode/extensions.json
 .idea/
 setup-log.txt
+
+# Windows script logs / pid files
+*.pid

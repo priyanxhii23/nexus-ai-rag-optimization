@@ -1,42 +1,63 @@
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
+import { Link, BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { page } from './animations/variants'
-import { ThemeProvider } from './contexts/ThemeContext'
+import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import { AppLayout } from './layouts/AppLayout'
-import { NAV } from './navigation'
-import Overview from './pages/Overview'
-import Settings from './pages/Settings'
-import Upcoming from './pages/Upcoming'
+const Benchmarks = lazy(() => import('./pages/Benchmarks'))
+const CachePage = lazy(() => import('./pages/Cache'))
+const Compare = lazy(() => import('./pages/Compare'))
+const Cost = lazy(() => import('./pages/Cost'))
+const Documents = lazy(() => import('./pages/Documents'))
+const Monitoring = lazy(() => import('./pages/Monitoring'))
+const Overview = lazy(() => import('./pages/Overview'))
+const Playground = lazy(() => import('./pages/Playground'))
+const RouterPage = lazy(() => import('./pages/Router'))
+const Settings = lazy(() => import('./pages/Settings'))
 
 function AnimatedRoutes() {
   const location = useLocation()
   return (
     <AnimatePresence mode="wait">
       <motion.div key={location.pathname} variants={page} initial="initial" animate="animate" exit="exit">
+        <Suspense fallback={<div className="p-6"><div className="h-6 w-40 animate-pulse rounded-md bg-surface-2" /></div>}>
         <Routes location={location}>
           <Route path="/" element={<Overview />} />
+          <Route path="/playground" element={<Playground />} />
+          <Route path="/documents" element={<Documents />} />
+          <Route path="/cache" element={<CachePage />} />
+          <Route path="/router" element={<RouterPage />} />
+          <Route path="/compare" element={<Compare />} />
+          <Route path="/cost" element={<Cost />} />
+          <Route path="/benchmarks" element={<Benchmarks />} />
+          <Route path="/monitoring" element={<Monitoring />} />
           <Route path="/settings" element={<Settings />} />
-          {NAV.filter(n => n.path !== '/' && n.path !== '/settings').map(n => (
-            <Route key={n.path} path={n.path} element={<Upcoming item={n} />} />
-          ))}
-          <Route path="*" element={<p className="p-6 text-sm text-muted">Page not found.</p>} />
+          <Route path="*" element={<div className="p-6 text-sm text-muted">Page not found. <Link className="text-accent" to="/">Back to Overview</Link></div>} />
         </Routes>
+        </Suspense>
       </motion.div>
     </AnimatePresence>
   )
 }
 
+function Shell() {
+  const { reduceMotion } = useTheme()
+  return (
+    // "user" respects the OS setting; the Settings toggle can force it on.
+    <MotionConfig reducedMotion={reduceMotion ? 'always' : 'user'}>
+      <BrowserRouter>
+        <AppLayout>
+          <AnimatedRoutes />
+        </AppLayout>
+      </BrowserRouter>
+    </MotionConfig>
+  )
+}
+
 export default function App() {
   return (
-    // reducedMotion="user" → respects the OS "reduce motion" setting everywhere
-    <MotionConfig reducedMotion="user">
-      <ThemeProvider>
-        <BrowserRouter>
-          <AppLayout>
-            <AnimatedRoutes />
-          </AppLayout>
-        </BrowserRouter>
-      </ThemeProvider>
-    </MotionConfig>
+    <ThemeProvider>
+      <Shell />
+    </ThemeProvider>
   )
 }

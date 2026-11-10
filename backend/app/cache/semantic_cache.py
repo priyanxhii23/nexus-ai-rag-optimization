@@ -86,9 +86,8 @@ def intent_conflicts(new_q: str, cached_q: str, new_category: str, cached_catego
         reasons.append("negation differs (e.g. 'not' in one question only)")
     qa = {m.lower() for m in _QUALIFIERS.findall(new_q)}
     qb = {m.lower() for m in _QUALIFIERS.findall(cached_q)}
-    if qa != qb:
-        diff = sorted(qa ^ qb)
-        reasons.append(f"different qualifier ({', '.join(diff)})")
+    if qa and qb and qa != qb:   # both constrain the question, but differently -> conflicting intent
+        reasons.append(f"different qualifier ({', '.join(sorted(qa))} vs {', '.join(sorted(qb))})")
     return reasons
 
 

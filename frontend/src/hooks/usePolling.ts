@@ -1,29 +1,39 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-/** Calls `fn` now and then every `intervalMs`. Returns data, error and loading state. */
-export function usePolling<T>(fn: () => Promise<T>, intervalMs = 10000) {
+/** Calls `fn` now and then every `intervalMs` (0 = once). Never overlaps requests,
+ *  never sets state after unmount, pauses while the browser tab is hidden. */
+export function usePolling<T>(fn: () => Promise<T>, intervalMs = 10000, deps: unknown[] = []) {
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const fnRef = useRef(fn)
-  fnRef.current = fn
+  const busy = useRef(false)
+  const alive = useRef(true)
+
+  useEffect(() => { fnRef.current = fn })
 
   const refresh = useCallback(async () => {
+    if (busy.current) return
+    busy.current = true
     try {
-      setData(await fnRef.current())
-      setError(null)
+      const value = await fnRef.current()
+      if (alive.current) { setData(value); setError(null) }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Request failed')
+      if (alive.current) setError(e instanceof Error ? e.message : 'Request failed')
     } finally {
-      setLoading(false)
+      busy.current = false
+      if (alive.current) setLoading(false)
     }
   }, [])
 
   useEffect(() => {
+    alive.current = true
     refresh()
-    const id = setInterval(refresh, intervalMs)
-    return () => clearInterval(id)
-  }, [refresh, intervalMs])
+    if (!intervalMs) return () => { alive.current = false }
+    const id = setInterval(() => { if (!document.hidden) refresh() }, intervalMs)
+    return () => { alive.current = false; clearInterval(id) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refresh, intervalMs, ...deps])
 
-  return { data, error, loading, refresh }
+  return { data, error, loading, refresh, setData }
 }

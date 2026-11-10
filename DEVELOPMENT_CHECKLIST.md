@@ -1,39 +1,55 @@
-# NEXUS AI — Development Checklist
+# NEXUS AI - Development Checklist (v0.4.0)
 
-Legend: [x] done & tested · [~] in progress · [ ] not started
+Legend: [x] implemented **and** tested · [~] implemented, not yet verified where noted · [ ] not done
 
-## Milestone 1 — Architecture, prerequisites, environment
-- [x] Architecture documented (docs/architecture.md)
-- [x] .gitignore and .env.example created
-- [ ] Python 3.12, Node LTS, Git, VS Code verified on laptop (run scripts/check_env.ps1)
-- [ ] Project folder opened in VS Code
-- [ ] Git repository initialised, first commit made
-- [ ] Backend virtual environment created and activates without errors
-- [ ] GitHub repository created and pushed
+"Tested" below means: executed in the cloud development container (Linux, Python 3.12, Node 22,
+PowerShell 7.6, headless Chromium). **Nothing has been run on the Windows laptop yet.**
 
-## Milestone 2 — Backend foundation, database, health-check API
-- [x] requirements.txt (FastAPI, SQLAlchemy, Pydantic, pytest)
-- [x] Settings loaded from .env (no hard-coded secrets)
-- [x] SQLite tables: documents, request_logs, llm_calls (all tenant-scoped)
-- [x] GET /api/health with real DB check; never returns API keys
-- [x] 4 pytest tests passing (isolated temp DB)
-- [x] Data persists across server restart (verified)
-- [ ] Verified on Windows laptop
-## Milestone 3 — Frontend foundation & animated dashboard shell
-- [x] Vite + React + TypeScript + Tailwind v4 + Framer Motion + Lucide
-- [x] Collapsible animated sidebar with all 10 sections
-- [x] Light/dark themes via CSS tokens, persisted in localStorage
-- [x] Overview reads real /api/metrics/overview + /api/health (polls every 10 s)
-- [x] Empty states (fresh install), loading skeletons, backend-offline error state
-- [x] Reduced-motion support (MotionConfig + CSS media query)
-- [x] Unbuilt pages show honest "Milestone N" status — no fake controls
-- [x] Backend: /api/metrics/overview + 2 tests (6 total passing)
-- [x] Verified in headless Chrome: no console errors, theme survives reload
-- [ ] Verified on Windows laptop
-## Milestone 4 — Multi-document RAG engine
-## Milestone 5 — Semantic caching (context-aware, TTL, invalidation)
-## Milestone 6 — Query intelligence, model routing, LLM adapters
-## Milestone 7 — Cost tracking & analytics
-## Milestone 8 — Model comparison lab, threshold optimizer, benchmarking
-## Milestone 9 — Live monitoring & cache management UI
-## Milestone 10 — Tests, security hardening, documentation
+## Audit of the uploaded v3.1 code
+- [x] Full audit with severities → `docs/AUDIT_REPORT.md` (21 findings; all addressed below)
+
+## Backend foundation
+- [x] FastAPI app, lifespan startup/shutdown, Swagger at /docs
+- [x] Settings from .env with validation; placeholder keys treated as missing
+- [x] SQLite + SQLAlchemy, lazy engine, WAL, foreign keys, timezone-aware timestamps
+- [x] Additive migrations: a real v3.1 `nexus.db` is upgraded without data loss (tested)
+- [x] Tests use a throw-away database (the real `data/nexus.db` is never touched)
+- [x] Central error handling (one JSON error shape, request IDs), rotating log file
+- [x] CORS for localhost + 127.0.0.1, security headers, rate limiting, request-size limit
+
+## Features
+- [x] 1 Multi-document RAG (PDF/TXT/MD, chunking, embeddings, ChromaDB, citations, update, delete, duplicates)
+- [x] 2 Semantic cache (exact + cosine, threshold, TTL, invalidation, tenant/scope isolation, intent guard)
+- [x] 3 Model routing (3 strategies, manual, nearest tier, fallback chain)
+- [x] 4 Threshold optimizer (real-embedding measurement, safety-first recommendation)
+- [x] 5 Model comparison (identical context, parallel, metrics, Markdown report)
+- [x] 6 Cost intelligence (provider/estimated tokens, priced/simulated/unpriced, counterfactual savings)
+- [x] 7 Cache management UI (search, filter, inspect, delete, clear, settings)
+- [x] 8 Query intelligence (6 categories, complexity score, signals)
+- [x] 9 Benchmarking lab (A/B/C, isolated tenant, all required metrics, MD/CSV reports)
+- [x] 10 Live monitoring (event stream with polling, stats, service status)
+- [x] Settings (runtime settings in DB, model enable/disable, prices, Gemini/compat model discovery)
+
+## LLM providers
+- [x] Mock provider (labelled, extractive, deterministic) - used by all tests
+- [x] Anthropic adapter - tested with a fake SDK client (usage, effort, server-side fallback, refusal)
+- [x] Gemini adapter - tested with a fake SDK client (usage incl. thinking tokens)
+- [x] OpenAI-compatible adapter - tested with a fake SDK client (reported + estimated usage)
+- [~] **Real API calls have NOT been made** (no keys in the dev container). First real call happens on your laptop.
+
+## Frontend
+- [x] React + TS + Vite + Tailwind v4 + Framer Motion + Recharts + Lucide; all 10 pages functional
+- [x] Light/dark themes (persisted, no flash), reduced-motion toggle, responsive (phone drawer)
+- [x] TypeScript compile, production build (code-split), 17 Vitest tests
+- [x] Browser check: all 10 pages × 2 themes, zero console errors, no horizontal scroll at 390 px
+
+## Windows
+- [x] setup_windows.ps1 / start_backend.ps1 / start_frontend.ps1 / helper scripts executed with PowerShell 7 on Linux
+- [~] start_all.bat / stop_all.bat / SETUP.bat / START.bat - **not executable in the container (no cmd.exe)**; reviewed only
+- [ ] Verified on the Windows laptop (Windows PowerShell 5.1, `py` launcher, taskkill)
+
+## Open items
+- [ ] Run with real Claude / Gemini keys and record a real (non-simulated) benchmark
+- [ ] Enter Gemini prices from https://ai.google.dev/gemini-api/docs/pricing (not pre-filled on purpose)
+- [ ] Screenshots for the README taken on the laptop
+- [ ] Push to GitHub (only after your approval)
