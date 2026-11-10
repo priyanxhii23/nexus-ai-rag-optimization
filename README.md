@@ -91,6 +91,16 @@ cd backend; .\.venv\Scripts\python.exe -m pytest; cd ..
 cd frontend; npm test; cd ..
 ```
 
+## Screenshots
+
+Captured in test mode (mock LLM, simulated costs) during development.
+
+| Overview (dark) | AI Playground - "how was this generated?" |
+|---|---|
+| ![Overview](docs/screenshots/overview-dark.png) | ![Playground](docs/screenshots/playground-dark.png) |
+
+![Benchmarking Lab (light)](docs/screenshots/benchmarks-light.png)
+
 ## Features
 
 | # | Feature | Where |

@@ -52,3 +52,6 @@ setup-log.txt
 
 # Windows script logs / pid files
 *.pid
+
+# Release archives
+*.zip
