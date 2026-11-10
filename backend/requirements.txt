@@ -1,13 +1,29 @@
-# ---- Milestone 2: web API + database ----
-fastapi>=0.115
-uvicorn[standard]>=0.30
-pydantic>=2.7
-pydantic-settings>=2.3
-sqlalchemy>=2.0
+# NEXUS AI backend dependencies (installed by setup_windows.ps1 into backend\.venv)
+
+# ---- Web API + database ----
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+python-multipart>=0.0.12
+pydantic>=2.7,<3
+pydantic-settings>=2.3,<3
+sqlalchemy>=2.0.30,<3
 python-dotenv>=1.0
+
+# ---- Embeddings / ML ----
+sentence-transformers>=3.3
+torch>=2.4
+numpy>=1.26
+scikit-learn>=1.5
+
+# ---- RAG ----
+chromadb>=1.0,<2
+pypdf>=5.0
+
+# ---- LLM provider SDKs ----
+anthropic>=2.0
+google-genai>=1.0
+openai>=1.50
 
 # ---- Testing ----
 pytest>=8.0
 httpx>=0.27
-
-# (AI/ML packages — sentence-transformers, chromadb, pypdf — are added in Milestone 4)
