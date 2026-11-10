@@ -145,10 +145,3 @@ data (wrapped, markup neutralised, injection tripwire) · central error handler 
 clients) · logs contain IDs and timings, never document text or answers · security headers · CORS
 limited to the dashboard origin.
 
-## Limitations & future work
-
-* The query classifier is rule-based (explainable); an ML classifier can replace `router/query_intelligence.analyze()`.
-* Quality metrics are automatic heuristics (keyword correctness, embedding-based faithfulness), not human ratings.
-* Tenant isolation is enforced through an `X-Tenant-ID` header; there is no login system.
-* Scanned (image-only) PDFs need OCR, which is not included.
-* Costs are estimates from token counts × list prices; providers' invoices are the source of truth.
