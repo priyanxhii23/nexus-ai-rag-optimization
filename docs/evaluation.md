@@ -28,12 +28,14 @@ pipeline, not real LLM performance. Costs are **simulated** with Claude list pri
 
 | Metric | A. Baseline | B. + cache | C. + cache + routing |
 |---|---|---|---|
-| Cache hit rate | 0% | 9.1% | 9.1% |
-| LLM calls (of 22) | 22 | 20 | 20 |
-| Simulated cost | $0.0909 | $0.0832 | $0.0116 |
-| Cost reduction vs A | - | 8.4% | 87.2% |
-| Avg latency | 23 ms | 35 ms | 36 ms |
-| Retrieval relevance / correctness | 0.95 / 0.90 | 0.95 / 0.90 | 0.95 / 0.90 |
+| Cache hit rate | 0% | 13.6% | 13.6% |
+| LLM calls (of 22) | 22 | 19 | 19 |
+| Simulated cost | $0.0909 | $0.0791 | $0.0115 |
+| Cost reduction vs A | - | 13.0% | 87.3% |
+| Avg latency | 25 ms | 33 ms | 32 ms |
+| Retrieval relevance / correctness / faithfulness | 0.95 / 0.90 / 0.64 | 0.95 / 0.90 / 0.64 | 0.95 / 0.90 / 0.64 |
+
+(Run on 2026-11-09 from a fresh install of the v4.0 ZIP.)
 
 Honest reading: in test mode the "LLM" answers instantly, so the cache lookup is pure overhead and B/C
 are slower. With real LLMs (seconds per answer) a cache hit saves that time; this must be measured on
