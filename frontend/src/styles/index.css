@@ -1,0 +1,71 @@
+@import '@fontsource-variable/inter';
+@import 'tailwindcss';
+
+/* "dark:" utilities apply when <html class="dark"> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Design tokens: one set of names, two themes ---------- */
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --surface-2: #f2f2f0;
+  --border: #e6e6e3;
+  --text: #15171c;
+  --muted: #646a78;
+  --accent: #4f46e5;
+  --accent-soft: #eef0ff;
+  --violet: #7c3aed;
+  --cyan: #0e9fb8;
+  --ok: #16a34a;
+  --warn: #c27c0e;
+  --err: #dc2626;
+}
+.dark {
+  --bg: #0b0e14;
+  --surface: #11151d;
+  --surface-2: #171c26;
+  --border: #222836;
+  --text: #e7e9ee;
+  --muted: #8b93a5;
+  --accent: #8b8ff8;
+  --accent-soft: #1c1f3a;
+  --violet: #a78bfa;
+  --cyan: #38c6dd;
+  --ok: #34d399;
+  --warn: #f2b84b;
+  --err: #f87171;
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-fg: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-violet: var(--violet);
+  --color-cyan: var(--cyan);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-err: var(--err);
+}
+
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 250ms ease, color 250ms ease;
+}
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}

@@ -1,0 +1,46 @@
+# ---------- Secrets (NEVER commit) ----------
+.env
+.env.*
+!.env.example
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# ---------- Node / Frontend ----------
+node_modules/
+frontend/dist/
+*.log
+npm-debug.log*
+
+# ---------- Local data (your private documents & databases) ----------
+data/documents/*
+!data/documents/.gitkeep
+data/chroma/
+data/*.db
+data/*.sqlite
+backend/*.db
+
+# Benchmark question sets ARE committed; generated run outputs are not
+data/benchmarks/runs/
+
+# Hugging Face / sentence-transformers model cache
+.cache/
+models_cache/
+
+# ---------- OS / Editor ----------
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+setup-log.txt
